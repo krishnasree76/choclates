@@ -36,6 +36,8 @@
     --ring: 40 50% 56%;
 
     --radius: 0.5rem;
+    width: 100%;
+  overflow-x: hidden;
 
     /* Custom tokens */
     --gold: 40 50% 56%;
@@ -172,4 +174,11 @@
   50% {
     opacity: 1;
   }
+  html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+
+
 }

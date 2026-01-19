@@ -18,9 +18,7 @@ const Navbar = () => {
   const { getTotalItems, setIsCartOpen } = useCart();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -42,25 +40,26 @@ const Navbar = () => {
             : "bg-transparent"
         }`}
       >
-        <div className="container-custom">
+        {/* ✅ add px-4 to avoid touching edges */}
+        <div className="container-custom px-4">
           <div className="flex items-center justify-between h-20 md:h-24">
             {/* Left Logo */}
             <motion.div
-              className="flex items-center gap-3"
+              className="flex items-center gap-3 min-w-0"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
               <img
                 src={logo}
                 alt="Darsi's Chocolate"
-                className="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover border-2 border-primary/50 shadow-lg"
+                className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-primary/50 shadow-lg flex-shrink-0"
               />
-              <span className="hidden sm:block font-heading text-lg md:text-xl text-cream">
+              <span className="hidden sm:block font-heading text-lg md:text-xl text-cream truncate">
                 Darsi's <span className="text-primary">Chocolate</span>
               </span>
             </motion.div>
 
-            {/* Right Nav Links - Desktop */}
+            {/* Desktop Nav */}
             <div className="hidden md:flex items-center space-x-8">
               {navLinks.map((link) => (
                 <button
@@ -71,8 +70,8 @@ const Navbar = () => {
                   {link.name}
                 </button>
               ))}
-              
-              {/* Cart Button */}
+
+              {/* Cart */}
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
@@ -92,11 +91,10 @@ const Navbar = () => {
               </motion.button>
             </div>
 
-            {/* Mobile Right Section */}
-            <div className="flex md:hidden items-center gap-2">
-              {/* Cart Button Mobile */}
+            {/* ✅ Mobile Right Section (fixed width so icon never overflows) */}
+            <div className="flex md:hidden items-center justify-end gap-2 w-[96px]">
+              {/* Cart */}
               <motion.button
-                whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsCartOpen(true)}
                 className="relative p-2"
@@ -112,11 +110,12 @@ const Navbar = () => {
                   </motion.span>
                 )}
               </motion.button>
-              
-              {/* Mobile Menu Button */}
+
+              {/* Menu */}
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="p-2 text-cream"
+                className="p-2 text-cream flex-shrink-0"
+                aria-label="Open menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -132,9 +131,9 @@ const Navbar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-chocolate-dark/98 backdrop-blur-xl"
+            className="fixed inset-0 z-50 bg-chocolate-dark/98 backdrop-blur-xl overflow-x-hidden"
           >
-            <div className="flex flex-col h-full p-8">
+            <div className="flex flex-col h-full p-6">
               <div className="flex justify-between items-center">
                 <img
                   src={logo}
@@ -144,17 +143,19 @@ const Navbar = () => {
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-2 text-cream"
+                  aria-label="Close menu"
                 >
                   <X className="w-8 h-8" />
                 </button>
               </div>
+
               <div className="flex flex-col items-center justify-center flex-1 space-y-8">
                 {navLinks.map((link, index) => (
                   <motion.button
                     key={link.name}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
+                    transition={{ delay: index * 0.08 }}
                     onClick={() => handleNavClick(link.href)}
                     className="text-2xl text-cream hover:text-primary transition-colors font-heading"
                   >
