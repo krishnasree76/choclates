@@ -174,10 +174,19 @@
   50% {
     opacity: 1;
   }
-  html, body {
+  html,
+body {
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
+  position: relative;
 }
+
+#root {
+  width: 100%;
+  overflow-x: hidden !important;
+  position: relative;
+}
+
 
 
 
