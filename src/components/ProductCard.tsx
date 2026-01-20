@@ -90,7 +90,7 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="glass-card overflow-hidden group"
+      className="glass-card overflow-visible group"
     >
       {/* Image */}
       <div className="relative h-56 overflow-hidden">
@@ -181,7 +181,8 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
         )}
 
         {/* ✅ Flavor Selector */}
-        {flavors.length > 0 && (
+        {/* ✅ Flavor Selector */}
+{flavors.length > 0 && (
   <div className="relative mb-4">
     <p className="text-cream-muted text-xs mb-2">Select Flavour</p>
 
@@ -192,9 +193,7 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
       }}
       className="w-full flex items-center justify-between px-4 py-3 bg-chocolate-light border border-primary/30 rounded-xl text-cream text-sm hover:border-primary/50 transition-colors"
     >
-      <span className="truncate">
-        {selectedFlavor || "Select Flavour"}
-      </span>
+      <span className="truncate">{selectedFlavor || "Select Flavour"}</span>
 
       <ChevronDown
         className={`w-4 h-4 text-primary transition-transform ${
@@ -211,14 +210,8 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
           exit={{ opacity: 0, y: -10 }}
           className="absolute z-[999] top-full left-0 right-0 mt-2 bg-chocolate-medium border border-primary/30 rounded-xl shadow-xl overflow-hidden"
         >
-          {/* ✅ Container: scroll only when items are many */}
-          <div
-            className={
-              flavors.length > 6
-                ? "max-h-72 overflow-y-auto scrollbar-gold pb-2"
-                : "overflow-hidden"
-            }
-          >
+          {/* ✅ For 6 flavours: show all items ALWAYS (NO scroll) */}
+          <div className="overflow-hidden">
             {flavors.map((flavor) => (
               <button
                 key={flavor}
@@ -233,6 +226,7 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
                 }`}
               >
                 <span className="truncate pr-2">{flavor}</span>
+
                 {selectedFlavor === flavor && (
                   <Check className="w-4 h-4 text-primary flex-shrink-0" />
                 )}
@@ -244,6 +238,7 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
     </AnimatePresence>
   </div>
 )}
+
 
         {/* Price */}
         <div className="text-primary font-semibold text-lg mb-4">
