@@ -24,10 +24,7 @@ interface AddToCartOptions {
 interface CartContextType {
   items: CartItem[];
 
-  // ✅ updated signature
   addToCart: (product: Product, options?: AddToCartOptions) => void;
-
-  // ✅ remove/update by cartItemId
   removeFromCart: (cartItemId: string) => void;
   updateQuantity: (cartItemId: string, quantity: number) => void;
 
@@ -62,7 +59,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const selectedPrice = options?.selectedPrice ?? product.price;
     const selectedPriceLabel = options?.selectedPriceLabel ?? product.priceLabel;
 
-    const cartItemId = buildCartItemId(product.id, selectedFlavor, selectedPrice);
+    const cartItemId = buildCartItemId(
+      product.id,
+      selectedFlavor,
+      selectedPrice
+    );
 
     setItems((prev) => {
       const existing = prev.find((item) => item.cartItemId === cartItemId);
@@ -88,7 +89,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       ];
     });
 
-    setIsCartOpen(true);
+    
   };
 
   const removeFromCart = (cartItemId: string) => {

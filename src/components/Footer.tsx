@@ -87,22 +87,27 @@ const Footer = () => {
           </div>
 
           {/* ✅ Copyright */}
-          <p className="text-cream-muted/60 text-sm flex flex-wrap items-center justify-center gap-1">
-            © {currentYear} Darsi's Chocolate. Made with
-            <Heart
-              className="w-4 h-4 text-primary inline-block"
-              fill="currentColor"
-            />
-            by{" "}
-            <a
-              href="https://staffarc.in"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              StaffArc
-            </a>
-          </p>
+          <p className="text-cream-muted/60 text-sm text-center">
+  © {currentYear} Darsi's Chocolate.
+</p>
+
+<p className="text-cream-muted/60 text-sm flex flex-wrap items-center justify-center gap-1 mt-2">
+  Made with
+  <Heart
+    className="w-4 h-4 text-primary inline-block"
+    fill="currentColor"
+  />
+  by{" "}
+  <a
+    href="https://staffarc.in"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-primary hover:underline"
+  >
+    StaffArc
+  </a>
+</p>
+
         </div>
       </div>
     </footer>

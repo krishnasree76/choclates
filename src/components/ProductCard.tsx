@@ -32,6 +32,7 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
   const [selectedVariantLabel, setSelectedVariantLabel] = useState(
     variants[0]?.label || ""
   );
+  const [isVariantOpen, setIsVariantOpen] = useState(false);
 
   const selectedVariant = useMemo(() => {
     if (!variants.length) return null;
@@ -42,6 +43,8 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
     setSelectedFlavor((product.flavors ?? [])[0] || "");
     setSelectedVariantLabel((product.variants ?? [])[0]?.label || "");
     setQuantity(1);
+    setIsFlavorOpen(false);
+    setIsVariantOpen(false);
   }, [product.id]);
 
   // ✅ price based on variant
@@ -55,8 +58,8 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
   const handleAddToCart = () => {
     addToCart(product, {
       selectedFlavor: selectedFlavor || undefined,
-      selectedPrice: priceToUse,             // ✅ correct price now
-      selectedPriceLabel: priceLabelToUse,   // ✅ correct variant label now
+      selectedPrice: priceToUse,
+      selectedPriceLabel: priceLabelToUse,
       quantity,
     });
 
@@ -65,7 +68,9 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
 
   const handleWhatsAppOrder = () => {
     const flavorText = selectedFlavor ? `\nFlavour: ${selectedFlavor}` : "";
-    const variantText = selectedVariant ? `\nVariant: ${selectedVariant.label}` : "";
+    const variantText = selectedVariant
+      ? `\nVariant: ${selectedVariant.label}`
+      : "";
 
     const message = encodeURIComponent(
       `Hi! I would like to order:\n\n` +
@@ -110,21 +115,68 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
           {product.description}
         </p>
 
-        {/* ✅ Variant Selector */}
+        {/* ✅ Variant Selector (THEMED LIKE FLAVOUR) */}
         {variants.length > 0 && (
-          <div className="mb-4">
+          <div className="relative mb-4">
             <p className="text-cream-muted text-xs mb-2">Select Variant</p>
-            <select
-              value={selectedVariantLabel}
-              onChange={(e) => setSelectedVariantLabel(e.target.value)}
-              className="w-full px-4 py-3 bg-chocolate-light border border-primary/30 rounded-xl text-cream text-sm hover:border-primary/50 transition-colors"
+
+            <button
+              onClick={() => {
+                setIsVariantOpen(!isVariantOpen);
+                setIsFlavorOpen(false);
+              }}
+              className="w-full flex items-center justify-between px-4 py-3 bg-chocolate-light border border-primary/30 rounded-xl text-cream text-sm hover:border-primary/50 transition-colors"
             >
-              {variants.map((v) => (
-                <option key={v.label} value={v.label}>
-                  {v.label} - ₹{v.price}
-                </option>
-              ))}
-            </select>
+              <span className="truncate">
+                {selectedVariant
+                  ? `${selectedVariant.label} - ₹${selectedVariant.price}`
+                  : "Select Variant"}
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-primary transition-transform ${
+                  isVariantOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            <AnimatePresence>
+              {isVariantOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute z-50 top-full left-0 right-0 mt-2 bg-chocolate-medium border border-primary/30 rounded-xl shadow-xl overflow-hidden"
+                >
+                  {/* ✅ Scroll container */}
+                  <div className="max-h-56 overflow-y-auto scrollbar-gold">
+                    {variants.map((v) => {
+                      const isActive = selectedVariantLabel === v.label;
+                      return (
+                        <button
+                          key={v.label}
+                          onClick={() => {
+                            setSelectedVariantLabel(v.label);
+                            setIsVariantOpen(false);
+                          }}
+                          className={`w-full flex items-center justify-between px-4 py-3 text-sm text-left hover:bg-primary/10 transition-colors ${
+                            isActive
+                              ? "bg-primary/20 text-primary"
+                              : "text-cream"
+                          }`}
+                        >
+                          <span className="truncate pr-2">
+                            {v.label} - ₹{v.price}
+                          </span>
+                          {isActive && (
+                            <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         )}
 
@@ -134,7 +186,10 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
             <p className="text-cream-muted text-xs mb-2">Select Flavour</p>
 
             <button
-              onClick={() => setIsFlavorOpen(!isFlavorOpen)}
+              onClick={() => {
+                setIsFlavorOpen(!isFlavorOpen);
+                setIsVariantOpen(false);
+              }}
               className="w-full flex items-center justify-between px-4 py-3 bg-chocolate-light border border-primary/30 rounded-xl text-cream text-sm hover:border-primary/50 transition-colors"
             >
               <span className="truncate">
@@ -153,27 +208,30 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="absolute z-50 top-full left-0 right-0 mt-2 bg-chocolate-medium border border-primary/30 rounded-xl overflow-hidden shadow-xl"
+                  className="absolute z-50 top-full left-0 right-0 mt-2 bg-chocolate-medium border border-primary/30 rounded-xl shadow-xl overflow-hidden"
                 >
-                  {flavors.map((flavor) => (
-                    <button
-                      key={flavor}
-                      onClick={() => {
-                        setSelectedFlavor(flavor);
-                        setIsFlavorOpen(false);
-                      }}
-                      className={`w-full flex items-center justify-between px-4 py-3 text-sm text-left hover:bg-primary/10 transition-colors ${
-                        selectedFlavor === flavor
-                          ? "bg-primary/20 text-primary"
-                          : "text-cream"
-                      }`}
-                    >
-                      <span className="truncate pr-2">{flavor}</span>
-                      {selectedFlavor === flavor && (
-                        <Check className="w-4 h-4 text-primary flex-shrink-0" />
-                      )}
-                    </button>
-                  ))}
+                  {/* ✅ Scroll container */}
+                  <div className="max-h-56 overflow-y-auto scrollbar-gold">
+                    {flavors.map((flavor) => (
+                      <button
+                        key={flavor}
+                        onClick={() => {
+                          setSelectedFlavor(flavor);
+                          setIsFlavorOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-4 py-3 text-sm text-left hover:bg-primary/10 transition-colors ${
+                          selectedFlavor === flavor
+                            ? "bg-primary/20 text-primary"
+                            : "text-cream"
+                        }`}
+                      >
+                        <span className="truncate pr-2">{flavor}</span>
+                        {selectedFlavor === flavor && (
+                          <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

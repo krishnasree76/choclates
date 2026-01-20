@@ -1,8 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Poppins:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ✅ GLOBAL FIX: Stop horizontal scroll on mobile */
+html,
+body {
+  width: 100%;
+  overflow-x: hidden !important;
+  position: relative;
+}
+
+#root {
+  width: 100%;
+  overflow-x: hidden !important;
+  position: relative;
+}
+
+/* Optional extra safe */
+* {
+  max-width: 100%;
+}
 
 @layer base {
   :root {
@@ -36,8 +55,6 @@
     --ring: 40 50% 56%;
 
     --radius: 0.5rem;
-    width: 100%;
-  overflow-x: hidden;
 
     /* Custom tokens */
     --gold: 40 50% 56%;
@@ -49,12 +66,12 @@
     --chocolate-dark: 330 40% 8%;
     --chocolate-medium: 330 35% 12%;
     --chocolate-light: 330 25% 18%;
-    
+
     /* Gradients */
     --gradient-gold: linear-gradient(135deg, hsl(40 50% 56%), hsl(42 55% 65%));
     --gradient-chocolate: linear-gradient(180deg, hsl(330 35% 12%), hsl(330 40% 8%));
     --gradient-hero: linear-gradient(135deg, hsl(330 40% 10%) 0%, hsl(330 35% 6%) 100%);
-    
+
     /* Shadows */
     --shadow-gold: 0 4px 30px hsl(40 50% 56% / 0.2);
     --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.3);
@@ -69,9 +86,7 @@
     --sidebar-border: 40 30% 25%;
     --sidebar-ring: 40 50% 56%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
@@ -85,7 +100,12 @@
     background-image: var(--gradient-hero);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading;
   }
 }
@@ -159,35 +179,40 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
     transform: translateY(-20px);
   }
 }
+/* ✅ Custom scrollbar (Gold) */
+.scrollbar-gold::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-gold::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+}
+
+.scrollbar-gold::-webkit-scrollbar-thumb {
+  background: rgba(209, 178, 106, 0.75);
+  border-radius: 20px;
+}
+
+.scrollbar-gold::-webkit-scrollbar-thumb:hover {
+  background: rgba(209, 178, 106, 1);
+}
+
 
 @keyframes shimmer {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.5;
   }
   50% {
     opacity: 1;
   }
-  html,
-body {
-  width: 100%;
-  overflow-x: hidden !important;
-  position: relative;
-}
-
-#root {
-  width: 100%;
-  overflow-x: hidden !important;
-  position: relative;
-}
-
-
-
-
 }
