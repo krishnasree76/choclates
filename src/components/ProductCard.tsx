@@ -182,64 +182,68 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
 
         {/* ✅ Flavor Selector */}
         {flavors.length > 0 && (
-          <div className="relative mb-4">
-            <p className="text-cream-muted text-xs mb-2">Select Flavour</p>
+  <div className="relative mb-4">
+    <p className="text-cream-muted text-xs mb-2">Select Flavour</p>
 
-            <button
-              onClick={() => {
-                setIsFlavorOpen(!isFlavorOpen);
-                setIsVariantOpen(false);
-              }}
-              className="w-full flex items-center justify-between px-4 py-3 bg-chocolate-light border border-primary/30 rounded-xl text-cream text-sm hover:border-primary/50 transition-colors"
-            >
-              <span className="truncate">
-                {selectedFlavor || "Select Flavour"}
-              </span>
-              <ChevronDown
-                className={`w-4 h-4 text-primary transition-transform ${
-                  isFlavorOpen ? "rotate-180" : ""
+    <button
+      onClick={() => {
+        setIsFlavorOpen(!isFlavorOpen);
+        setIsVariantOpen(false);
+      }}
+      className="w-full flex items-center justify-between px-4 py-3 bg-chocolate-light border border-primary/30 rounded-xl text-cream text-sm hover:border-primary/50 transition-colors"
+    >
+      <span className="truncate">
+        {selectedFlavor || "Select Flavour"}
+      </span>
+
+      <ChevronDown
+        className={`w-4 h-4 text-primary transition-transform ${
+          isFlavorOpen ? "rotate-180" : ""
+        }`}
+      />
+    </button>
+
+    <AnimatePresence>
+      {isFlavorOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          className="absolute z-[999] top-full left-0 right-0 mt-2 bg-chocolate-medium border border-primary/30 rounded-xl shadow-xl overflow-hidden"
+        >
+          {/* ✅ Container: scroll only when items are many */}
+          <div
+            className={
+              flavors.length > 6
+                ? "max-h-72 overflow-y-auto scrollbar-gold pb-2"
+                : "overflow-hidden"
+            }
+          >
+            {flavors.map((flavor) => (
+              <button
+                key={flavor}
+                onClick={() => {
+                  setSelectedFlavor(flavor);
+                  setIsFlavorOpen(false);
+                }}
+                className={`w-full flex items-center justify-between px-4 py-3 text-sm text-left hover:bg-primary/10 transition-colors ${
+                  selectedFlavor === flavor
+                    ? "bg-primary/20 text-primary"
+                    : "text-cream"
                 }`}
-              />
-            </button>
-
-            <AnimatePresence>
-              {isFlavorOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute z-50 top-full left-0 right-0 mt-2 bg-chocolate-medium border border-primary/30 rounded-xl shadow-xl overflow-hidden"
-                >
-                  {/* ✅ Scroll container */}
-                  <div className="max-h-64 overflow-y-auto scrollbar-gold pb-2">
-
-                    {flavors.map((flavor) => (
-                      <button
-                        key={flavor}
-                        onClick={() => {
-                          setSelectedFlavor(flavor);
-                          setIsFlavorOpen(false);
-                        }}
-                        className={`w-full flex items-center justify-between px-4 py-3 text-sm text-left hover:bg-primary/10 transition-colors ${
-                          selectedFlavor === flavor
-                            ? "bg-primary/20 text-primary"
-                            : "text-cream"
-                        }`}
-                      >
-                        <span className="truncate pr-2">{flavor}</span>
-                        {selectedFlavor === flavor && (
-                          <Check className="w-4 h-4 text-primary flex-shrink-0" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+              >
+                <span className="truncate pr-2">{flavor}</span>
+                {selectedFlavor === flavor && (
+                  <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                )}
+              </button>
+            ))}
           </div>
-        )}
-
-        <p className="text-bronze text-xs mb-4">{product.minOrder}</p>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+)}
 
         {/* Price */}
         <div className="text-primary font-semibold text-lg mb-4">

@@ -189,8 +189,9 @@ body {
 }
 /* ✅ Medium Gold Scrollbar */
 .scrollbar-gold::-webkit-scrollbar {
-  width: 4px; /* ✅ medium size */
+  width: 3px; /* ✅ very thin premium */
 }
+
 
 .scrollbar-gold::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
