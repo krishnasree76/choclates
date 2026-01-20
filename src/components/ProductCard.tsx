@@ -211,7 +211,8 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
                   className="absolute z-50 top-full left-0 right-0 mt-2 bg-chocolate-medium border border-primary/30 rounded-xl shadow-xl overflow-hidden"
                 >
                   {/* ✅ Scroll container */}
-                  <div className="max-h-56 overflow-y-auto scrollbar-gold">
+                  <div className="max-h-64 overflow-y-auto scrollbar-gold pb-2">
+
                     {flavors.map((flavor) => (
                       <button
                         key={flavor}
