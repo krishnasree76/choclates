@@ -21,12 +21,14 @@ const Navbar = () => {
   const { getTotalItems, setIsCartOpen } = useCart();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ✅ Lock scroll when mobile menu is open
+  // ✅ Lock scroll on body when menu is open
   useEffect(() => {
     if (isMobileMenuOpen) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "";
@@ -61,7 +63,6 @@ const Navbar = () => {
                 ease: "linear",
               }}
             >
-              {/* repeat twice for continuous scroll */}
               <span className="px-6">{announcementText}</span>
               <span className="px-6">{announcementText}</span>
               <span className="px-6">{announcementText}</span>
@@ -70,7 +71,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* ✅ Navbar (pushed down by bar height) */}
+      {/* ✅ Navbar */}
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -78,9 +79,10 @@ const Navbar = () => {
           isScrolled ? "bg-white/95 backdrop-blur-xl shadow-lg" : "bg-transparent"
         }`}
       >
-        <div className="container-custom">
-          <div className="flex items-center justify-between h-20 md:h-24">
-            {/* Left Logo */}
+        {/* ✅ FIX: Added padding for mobile so logo doesn’t go too left */}
+        <div className="container-custom px-4 md:px-0">
+          <div className="flex items-center justify-between h-20 md:h-24 px-1">
+            {/* Logo */}
             <motion.div
               className="flex items-center gap-3"
               whileHover={{ scale: 1.02 }}
@@ -92,11 +94,11 @@ const Navbar = () => {
                 className="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover border-2 border-primary/30 shadow-lg"
               />
               <span className="hidden sm:block font-heading text-lg md:text-xl text-foreground">
-                Darsi's <span className="text-primary">Chocolate</span>
+                Darsi&apos;s <span className="text-primary">Chocolate</span>
               </span>
             </motion.div>
 
-            {/* Right Nav Links - Desktop */}
+            {/* Desktop Nav */}
             <div className="hidden md:flex items-center space-x-8">
               {navLinks.map((link) => (
                 <button
@@ -128,7 +130,7 @@ const Navbar = () => {
               </motion.button>
             </div>
 
-            {/* Mobile Right Section */}
+            {/* Mobile Right */}
             <div className="flex md:hidden items-center gap-2">
               {/* Cart Button Mobile */}
               <motion.button
@@ -153,6 +155,7 @@ const Navbar = () => {
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
                 className="p-2 text-foreground"
+                aria-label="Open menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -161,7 +164,7 @@ const Navbar = () => {
         </div>
       </motion.nav>
 
-      {/* ✅ Mobile Menu */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -180,6 +183,7 @@ const Navbar = () => {
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-2 text-foreground"
+                  aria-label="Close menu"
                 >
                   <X className="w-8 h-8" />
                 </button>
