@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Minus, Trash2, MessageCircle, ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/CartContext";
@@ -12,6 +13,26 @@ const CartDrawer = () => {
     getTotalPrice,
     clearCart,
   } = useCart();
+
+  // ✅ Helper: extract minimum quantity from product.minOrder
+  const getMinQty = (minOrder: string) => {
+    const match = minOrder?.match(/(\d+)/);
+    const qty = match ? parseInt(match[1], 10) : 1;
+    return Number.isNaN(qty) ? 1 : qty;
+  };
+
+  // ✅ Optional (Recommended): auto-fix cart quantities if below min order
+  useEffect(() => {
+    if (!isCartOpen) return;
+
+    items.forEach((item) => {
+      const minQty = getMinQty(item.product.minOrder);
+      if (item.quantity < minQty) {
+        updateQuantity(item.cartItemId, minQty);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCartOpen]);
 
   const handleWhatsAppCheckout = () => {
     if (items.length === 0) return;
@@ -59,7 +80,7 @@ const CartDrawer = () => {
             className="fixed inset-0 bg-foreground/20 backdrop-blur-sm z-50"
           />
 
-          {/* ✅ Drawer (FIXED OFFSET BELOW ANNOUNCEMENT BAR) */}
+          {/* ✅ Drawer */}
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -105,6 +126,9 @@ const CartDrawer = () => {
                   const unitPrice = item.selectedPrice ?? item.product.price;
                   const lineTotal = unitPrice * item.quantity;
 
+                  const minQty = getMinQty(item.product.minOrder);
+                  const isMinReached = item.quantity <= minQty;
+
                   return (
                     <motion.div
                       key={item.cartItemId}
@@ -136,16 +160,28 @@ const CartDrawer = () => {
                           </div>
                         )}
 
+                        {/* ✅ show min order info */}
+                        <p className="text-[11px] text-primary/80 mt-1">
+                          Min order: {minQty}
+                        </p>
+
                         <p className="text-primary font-semibold mt-2">
                           ₹{lineTotal}
                         </p>
 
+                        {/* Quantity controls */}
                         <div className="flex items-center gap-2 mt-2">
                           <button
                             onClick={() =>
                               updateQuantity(item.cartItemId, item.quantity - 1)
                             }
-                            className="w-7 h-7 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-white transition-colors"
+                            disabled={isMinReached}
+                            className={`w-7 h-7 rounded-full border flex items-center justify-center transition-colors
+                              ${
+                                isMinReached
+                                  ? "border-primary/20 text-primary/30 cursor-not-allowed"
+                                  : "border-primary/30 text-primary hover:bg-white"
+                              }`}
                           >
                             <Minus className="w-3 h-3" />
                           </button>
