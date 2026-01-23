@@ -24,12 +24,10 @@ const CartDrawer = () => {
 
       message += `▪ ${item.product.name}\n`;
 
-      // ✅ show flavour if selected
       if (item.selectedFlavor) {
         message += `  Flavour: ${item.selectedFlavor}\n`;
       }
 
-      // ✅ show selected variant/weight/box if present
       if (item.selectedPriceLabel) {
         message += `  Option: ${item.selectedPriceLabel}\n`;
       }
@@ -61,20 +59,29 @@ const CartDrawer = () => {
             className="fixed inset-0 bg-foreground/20 backdrop-blur-sm z-50"
           />
 
-          {/* Drawer */}
+          {/* ✅ Drawer (FIXED OFFSET BELOW ANNOUNCEMENT BAR) */}
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed top-0 right-0 h-full w-full max-w-md bg-white border-l border-border z-50 flex flex-col"
+            className="
+              fixed right-0 z-[80] flex flex-col
+              top-9 md:top-10
+              h-[calc(100vh-36px)] md:h-[calc(100vh-40px)]
+              w-full max-w-md
+              bg-white border-l border-border
+            "
           >
             {/* Header */}
-            <div className="p-6 border-b border-border flex items-center justify-between">
+            <div className="p-5 sm:p-6 border-b border-border flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <ShoppingBag className="w-6 h-6 text-primary" />
-                <h2 className="font-heading text-2xl text-foreground">Your Cart</h2>
+                <h2 className="font-heading text-xl sm:text-2xl text-foreground">
+                  Your Cart
+                </h2>
               </div>
+
               <button
                 onClick={() => setIsCartOpen(false)}
                 className="p-2 rounded-full hover:bg-pink-light transition-colors"
@@ -84,7 +91,7 @@ const CartDrawer = () => {
             </div>
 
             {/* Items */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
               {items.length === 0 ? (
                 <div className="text-center py-12">
                   <ShoppingBag className="w-16 h-16 text-primary/30 mx-auto mb-4" />
@@ -118,7 +125,6 @@ const CartDrawer = () => {
                           {item.product.name}
                         </h3>
 
-                        {/* ✅ Show selected option */}
                         {(item.selectedFlavor || item.selectedPriceLabel) && (
                           <div className="text-xs text-muted-foreground mt-1 space-y-0.5">
                             {item.selectedFlavor && (
@@ -139,7 +145,7 @@ const CartDrawer = () => {
                             onClick={() =>
                               updateQuantity(item.cartItemId, item.quantity - 1)
                             }
-                            className="w-6 h-6 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-white transition-colors"
+                            className="w-7 h-7 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-white transition-colors"
                           >
                             <Minus className="w-3 h-3" />
                           </button>
@@ -152,7 +158,7 @@ const CartDrawer = () => {
                             onClick={() =>
                               updateQuantity(item.cartItemId, item.quantity + 1)
                             }
-                            className="w-6 h-6 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-white transition-colors"
+                            className="w-7 h-7 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-white transition-colors"
                           >
                             <Plus className="w-3 h-3" />
                           </button>
@@ -173,7 +179,7 @@ const CartDrawer = () => {
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="p-6 border-t border-border space-y-4">
+              <div className="p-5 sm:p-6 border-t border-border space-y-4 bg-white">
                 <div className="flex items-center justify-between text-lg">
                   <span className="text-muted-foreground">Total</span>
                   <span className="text-primary font-heading text-2xl">
