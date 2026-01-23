@@ -12,18 +12,28 @@ const navLinks = [
   { name: "Contact", href: "#contact" },
 ];
 
+const announcementText =
+  "We deliver across Pan-India. Freshly Prepared for Every Order. Please order at least 7 days in advance. Prepaid orders only. No COD available.";
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { getTotalItems, setIsCartOpen } = useCart();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // ✅ Lock scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
 
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
@@ -33,13 +43,39 @@ const Navbar = () => {
 
   return (
     <>
+      {/* ✅ Announcement Bar */}
+      <div className="fixed top-0 left-0 w-full z-[60] bg-primary text-white h-10 overflow-hidden">
+        <div className="relative w-full h-full flex items-center">
+          {/* Fade edges */}
+          <div className="pointer-events-none absolute left-0 top-0 h-full w-10 bg-gradient-to-r from-primary to-transparent z-10" />
+          <div className="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-primary to-transparent z-10" />
+
+          {/* Marquee */}
+          <div className="w-full overflow-hidden">
+            <motion.div
+              className="flex whitespace-nowrap text-sm font-semibold tracking-wide"
+              animate={{ x: ["0%", "-100%"] }}
+              transition={{
+                duration: 18,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            >
+              {/* repeat twice for continuous scroll */}
+              <span className="px-6">{announcementText}</span>
+              <span className="px-6">{announcementText}</span>
+              <span className="px-6">{announcementText}</span>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* ✅ Navbar (pushed down by bar height) */}
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "bg-white/95 backdrop-blur-xl shadow-lg"
-            : "bg-transparent"
+        className={`fixed top-10 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled ? "bg-white/95 backdrop-blur-xl shadow-lg" : "bg-transparent"
         }`}
       >
         <div className="container-custom">
@@ -71,7 +107,7 @@ const Navbar = () => {
                   {link.name}
                 </button>
               ))}
-              
+
               {/* Cart Button */}
               <motion.button
                 whileHover={{ scale: 1.1 }}
@@ -112,7 +148,7 @@ const Navbar = () => {
                   </motion.span>
                 )}
               </motion.button>
-              
+
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
@@ -125,14 +161,14 @@ const Navbar = () => {
         </div>
       </motion.nav>
 
-      {/* Mobile Menu */}
+      {/* ✅ Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-white/98 backdrop-blur-xl"
+            className="fixed inset-0 z-[70] bg-white/98 backdrop-blur-xl"
           >
             <div className="flex flex-col h-full p-8">
               <div className="flex justify-between items-center">
@@ -148,6 +184,7 @@ const Navbar = () => {
                   <X className="w-8 h-8" />
                 </button>
               </div>
+
               <div className="flex flex-col items-center justify-center flex-1 space-y-8">
                 {navLinks.map((link, index) => (
                   <motion.button

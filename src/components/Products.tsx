@@ -16,16 +16,19 @@ const Products = () => {
           <span className="text-primary text-sm tracking-[0.3em] uppercase font-semibold mb-4 block">
             Our Collection
           </span>
+
           <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
             Exquisite <span className="gradient-purple-text">Chocolates</span>
           </h2>
+
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Discover our handcrafted selection of premium chocolates, from classic
             flavors to exclusive designer creations
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {/* ✅ 2 per row in phone */}
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
           {products.map((product, index) => (
             <ProductCard key={product.id} product={product} index={index} />
           ))}

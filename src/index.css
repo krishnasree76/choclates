@@ -116,6 +116,11 @@
     animation: float 6s ease-in-out infinite 2s;
   }
 }
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); }

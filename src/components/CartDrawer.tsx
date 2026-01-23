@@ -17,16 +17,33 @@ const CartDrawer = () => {
     if (items.length === 0) return;
 
     let message = "🍫 *Order from Darsi's Chocolate*\n\n";
+
     items.forEach((item) => {
+      const unitPrice = item.selectedPrice ?? item.product.price;
+      const lineTotal = unitPrice * item.quantity;
+
       message += `▪ ${item.product.name}\n`;
-      message += `  Qty: ${item.quantity} × ₹${item.product.price} = ₹${item.product.price * item.quantity}\n\n`;
+
+      // ✅ show flavour if selected
+      if (item.selectedFlavor) {
+        message += `  Flavour: ${item.selectedFlavor}\n`;
+      }
+
+      // ✅ show selected variant/weight/box if present
+      if (item.selectedPriceLabel) {
+        message += `  Option: ${item.selectedPriceLabel}\n`;
+      }
+
+      message += `  Qty: ${item.quantity} × ₹${unitPrice} = ₹${lineTotal}\n\n`;
     });
+
     message += `━━━━━━━━━━━━━━━━━━━━\n`;
     message += `*Total: ₹${getTotalPrice()}*\n\n`;
     message += `Please confirm my order. Thank you!`;
 
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/919494437815?text=${encodedMessage}`, "_blank");
+
     clearCart();
     setIsCartOpen(false);
   };
@@ -77,57 +94,80 @@ const CartDrawer = () => {
                   </p>
                 </div>
               ) : (
-                items.map((item) => (
-                  <motion.div
-                    key={item.product.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, x: -100 }}
-                    className="bg-pink-light rounded-2xl p-4 flex gap-4 border border-border"
-                  >
-                    <img
-                      src={item.product.image}
-                      alt={item.product.name}
-                      className="w-20 h-20 object-cover rounded-xl"
-                    />
-                    <div className="flex-1">
-                      <h3 className="text-foreground font-medium text-sm line-clamp-1">
-                        {item.product.name}
-                      </h3>
-                      <p className="text-primary font-semibold mt-1">
-                        ₹{item.product.price * item.quantity}
-                      </p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <button
-                          onClick={() =>
-                            updateQuantity(item.product.id, item.quantity - 1)
-                          }
-                          className="w-6 h-6 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-white transition-colors"
-                        >
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <span className="text-foreground text-sm w-6 text-center">
-                          {item.quantity}
-                        </span>
-                        <button
-                          onClick={() =>
-                            updateQuantity(item.product.id, item.quantity + 1)
-                          }
-                          className="w-6 h-6 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-white transition-colors"
-                        >
-                          <Plus className="w-3 h-3" />
-                        </button>
-                        <button
-                          onClick={() => removeFromCart(item.product.id)}
-                          className="ml-auto p-1.5 rounded-full hover:bg-destructive/10 transition-colors text-destructive"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                items.map((item) => {
+                  const unitPrice = item.selectedPrice ?? item.product.price;
+                  const lineTotal = unitPrice * item.quantity;
+
+                  return (
+                    <motion.div
+                      key={item.cartItemId}
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, x: -100 }}
+                      className="bg-pink-light rounded-2xl p-4 flex gap-4 border border-border"
+                    >
+                      <img
+                        src={item.product.image}
+                        alt={item.product.name}
+                        className="w-20 h-20 object-cover rounded-xl"
+                      />
+
+                      <div className="flex-1">
+                        <h3 className="text-foreground font-medium text-sm line-clamp-1">
+                          {item.product.name}
+                        </h3>
+
+                        {/* ✅ Show selected option */}
+                        {(item.selectedFlavor || item.selectedPriceLabel) && (
+                          <div className="text-xs text-muted-foreground mt-1 space-y-0.5">
+                            {item.selectedFlavor && (
+                              <p>Flavour: {item.selectedFlavor}</p>
+                            )}
+                            {item.selectedPriceLabel && (
+                              <p>Option: {item.selectedPriceLabel}</p>
+                            )}
+                          </div>
+                        )}
+
+                        <p className="text-primary font-semibold mt-2">
+                          ₹{lineTotal}
+                        </p>
+
+                        <div className="flex items-center gap-2 mt-2">
+                          <button
+                            onClick={() =>
+                              updateQuantity(item.cartItemId, item.quantity - 1)
+                            }
+                            className="w-6 h-6 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-white transition-colors"
+                          >
+                            <Minus className="w-3 h-3" />
+                          </button>
+
+                          <span className="text-foreground text-sm w-6 text-center">
+                            {item.quantity}
+                          </span>
+
+                          <button
+                            onClick={() =>
+                              updateQuantity(item.cartItemId, item.quantity + 1)
+                            }
+                            className="w-6 h-6 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-white transition-colors"
+                          >
+                            <Plus className="w-3 h-3" />
+                          </button>
+
+                          <button
+                            onClick={() => removeFromCart(item.cartItemId)}
+                            className="ml-auto p-1.5 rounded-full hover:bg-destructive/10 transition-colors text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))
+                    </motion.div>
+                  );
+                })
               )}
             </div>
 
@@ -140,6 +180,7 @@ const CartDrawer = () => {
                     ₹{getTotalPrice()}
                   </span>
                 </div>
+
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}

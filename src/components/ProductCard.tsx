@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Minus, ShoppingBag, MessageCircle, ChevronDown, Check } from "lucide-react";
+import {
+  Plus,
+  Minus,
+  ShoppingBag,
+  MessageCircle,
+  ChevronDown,
+  Check,
+} from "lucide-react";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 
@@ -11,26 +18,56 @@ interface ProductCardProps {
 
 const ProductCard = ({ product, index }: ProductCardProps) => {
   const [quantity, setQuantity] = useState(1);
+
+  // ✅ Flavor selector state
   const [selectedFlavor, setSelectedFlavor] = useState(product.flavors?.[0] || "");
   const [isFlavorOpen, setIsFlavorOpen] = useState(false);
+
+  // ✅ Variant selector state (Weight/Box/grams)
+  const [selectedVariant, setSelectedVariant] = useState(product.variants?.[0] || null);
+  const [isVariantOpen, setIsVariantOpen] = useState(false);
+
   const { addToCart } = useCart();
 
+  // ✅ Dynamic price based on selected variant
+  const currentPrice = selectedVariant?.price ?? product.price;
+
+  // ✅ Dynamic label (Bar/Box fallback)
+  const unitLabel =
+    product.id.includes("bites") || product.id.includes("bars") || product.details.toLowerCase().includes("box")
+      ? "Box"
+      : "Bar";
+
+  const displayPriceLabel = selectedVariant
+    ? `₹${selectedVariant.price} / ${unitLabel}`
+    : product.priceLabel;
+
   const handleAddToCart = () => {
+    // ✅ add based on quantity
     for (let i = 0; i < quantity; i++) {
-      addToCart(product);
+      addToCart(product, {
+  selectedFlavor,
+  selectedPrice: currentPrice,
+  selectedPriceLabel: selectedVariant ? selectedVariant.label : undefined,
+  quantity,
+});
+
     }
     setQuantity(1);
   };
 
   const handleWhatsAppOrder = () => {
     const flavorText = selectedFlavor ? `\nFlavour: ${selectedFlavor}` : "";
+    const variantText = selectedVariant ? `\nSelected: ${selectedVariant.label}` : "";
+
     const message = encodeURIComponent(
       `Hi! I would like to order:\n\n` +
-        `Product: ${product.name}${flavorText}\n` +
+        `Product: ${product.name}${flavorText}${variantText}\n` +
         `Quantity: ${quantity}\n` +
-        `Price: ₹${product.price * quantity}\n\n` +
+        `Price: ₹${currentPrice * quantity}\n\n` +
         `Please confirm availability.`
     );
+
     window.open(`https://wa.me/919494437815?text=${message}`, "_blank");
   };
 
@@ -57,14 +94,70 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
 
       {/* Content */}
       <div className="p-6">
+        {/* ✅ Show weight selected in title */}
         <h3 className="font-heading text-xl text-foreground mb-2 line-clamp-1">
-          {product.name}
+          {product.name} {selectedVariant ? `(${selectedVariant.label})` : ""}
         </h3>
+
         <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
           {product.description}
         </p>
-        
-        {/* Flavor Selector - White & Pink Only */}
+
+        {/* ✅ Variant Selector (Weight/Box) */}
+        {product.variants && product.variants.length > 0 && (
+          <div className="relative mb-4">
+            <button
+              onClick={() => setIsVariantOpen(!isVariantOpen)}
+              className="w-full flex items-center justify-between px-4 py-3 bg-pink-light border border-primary/30 rounded-xl text-foreground text-sm hover:border-primary transition-colors"
+            >
+              <span className="truncate">
+                {selectedVariant?.label || "Select Option"}
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-primary transition-transform ${
+                  isVariantOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            <AnimatePresence>
+              {isVariantOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border border-primary/30 rounded-xl overflow-hidden shadow-xl"
+                >
+                  <div className="max-h-48 overflow-y-auto">
+                    {product.variants.map((variant) => (
+                      <button
+                        key={variant.label}
+                        onClick={() => {
+                          setSelectedVariant(variant);
+                          setIsVariantOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-4 py-3 text-sm text-left transition-colors ${
+                          selectedVariant?.label === variant.label
+                            ? "bg-primary text-white"
+                            : "text-foreground hover:bg-pink-light"
+                        }`}
+                      >
+                        <span className="truncate pr-2">
+                          {variant.label} — ₹{variant.price}
+                        </span>
+                        {selectedVariant?.label === variant.label && (
+                          <Check className="w-4 h-4 flex-shrink-0" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+
+        {/* ✅ Flavor Selector */}
         {product.flavors && product.flavors.length > 0 && (
           <div className="relative mb-4">
             <button
@@ -72,9 +165,13 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
               className="w-full flex items-center justify-between px-4 py-3 bg-pink-light border border-primary/30 rounded-xl text-foreground text-sm hover:border-primary transition-colors"
             >
               <span className="truncate">{selectedFlavor || "Select Flavour"}</span>
-              <ChevronDown className={`w-4 h-4 text-primary transition-transform ${isFlavorOpen ? "rotate-180" : ""}`} />
+              <ChevronDown
+                className={`w-4 h-4 text-primary transition-transform ${
+                  isFlavorOpen ? "rotate-180" : ""
+                }`}
+              />
             </button>
-            
+
             <AnimatePresence>
               {isFlavorOpen && (
                 <motion.div
@@ -92,8 +189,8 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
                           setIsFlavorOpen(false);
                         }}
                         className={`w-full flex items-center justify-between px-4 py-3 text-sm text-left transition-colors ${
-                          selectedFlavor === flavor 
-                            ? "bg-primary text-white" 
+                          selectedFlavor === flavor
+                            ? "bg-primary text-white"
                             : "text-foreground hover:bg-pink-light"
                         }`}
                       >
@@ -110,11 +207,12 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
           </div>
         )}
 
+        {/* Min Order */}
         <p className="text-primary text-xs mb-4 font-medium">{product.minOrder}</p>
 
-        {/* Price */}
+        {/* ✅ Price (Dynamic) */}
         <div className="text-primary font-bold text-lg mb-4">
-          {product.priceLabel}
+          {displayPriceLabel}
         </div>
 
         {/* Quantity Selector */}
@@ -128,9 +226,11 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
             >
               <Minus className="w-4 h-4" />
             </motion.button>
+
             <span className="text-foreground font-semibold w-8 text-center">
               {quantity}
             </span>
+
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setQuantity(quantity + 1)}
@@ -152,6 +252,7 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
             <ShoppingBag className="w-4 h-4" />
             Add to Cart
           </motion.button>
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
