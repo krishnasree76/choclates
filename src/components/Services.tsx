@@ -36,10 +36,7 @@ const services = [
 
 const Services = () => {
   return (
-    <section id="services" className="section-padding relative">
-      {/* Decorative gradient */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-
+    <section id="services" className="section-padding relative bg-background">
       <div className="container-custom">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -48,16 +45,18 @@ const Services = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <span className="text-primary text-sm tracking-[0.3em] uppercase font-medium mb-4 block">
+          <span className="text-primary text-sm tracking-[0.3em] uppercase font-semibold mb-4 block">
             What We Offer
           </span>
-          <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-cream mb-6">
+
+          <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
             Customised Chocolates for{" "}
-            <span className="gradient-gold-text">All Occasions</span>
+            <span className="gradient-purple-text">All Occasions</span>
           </h2>
-          <p className="text-cream-muted text-lg max-w-2xl mx-auto">
-            From intimate gatherings to grand celebrations, we create the perfect
-            chocolate experience tailored just for you
+
+          {/* ✅ Updated Subtitle Text */}
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Crafted to celebrate your moments—beautifully, deliciously, personally.
           </p>
         </motion.div>
 
@@ -70,18 +69,20 @@ const Services = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ y: -5 }}
-              className="glass-card p-8 text-center group hover:border-primary/40 transition-all duration-500"
+              className="bg-white rounded-2xl p-8 text-center shadow-lg border border-border group hover:border-primary/40 transition-all duration-500"
             >
               <motion.div
                 whileHover={{ scale: 1.1, rotate: 5 }}
-                className="w-14 h-14 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors"
+                className="w-14 h-14 mx-auto mb-6 rounded-full bg-pink-light flex items-center justify-center group-hover:bg-primary/20 transition-colors"
               >
                 <service.icon className="w-7 h-7 text-primary" />
               </motion.div>
-              <h3 className="font-heading text-xl text-cream mb-3">
+
+              <h3 className="font-heading text-xl text-foreground mb-3">
                 {service.title}
               </h3>
-              <p className="text-cream-muted text-sm">{service.description}</p>
+
+              <p className="text-muted-foreground text-sm">{service.description}</p>
             </motion.div>
           ))}
         </div>

@@ -1,92 +1,64 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Poppins:wght@300;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ✅ GLOBAL FIX: Stop horizontal scroll on mobile */
-html,
-body {
-  width: 100%;
-  overflow-x: hidden !important;
-  position: relative;
-}
+@layer base {
+  :root {
+    /* Light Pink & Purple Theme */
+    --background: 340 30% 97%;
+    --foreground: 25 40% 25%;
 
-#root {
-  width: 100%;
-  overflow-x: hidden !important;
-  position: relative;
-}
+    --card: 0 0% 100%;
+    --card-foreground: 25 40% 25%;
 
-/* Optional extra safe */
-* {
-  max-width: 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 25 40% 25%;
+
+    --primary: 320 70% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 280 60% 45%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 340 20% 92%;
+    --muted-foreground: 25 25% 45%;
+
+    --accent: 320 50% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 340 20% 88%;
+    --input: 340 15% 94%;
+    --ring: 320 70% 50%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --pink: 320 70% 50%;
+    --pink-light: 340 60% 92%;
+    --pink-dark: 320 65% 40%;
+    --purple: 280 60% 45%;
+    --brown: 25 40% 25%;
+    --chocolate-dark: 25 50% 20%;
+    --chocolate-medium: 25 35% 35%;
+    --chocolate-light: 25 20% 50%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 25 40% 25%;
+    --sidebar-primary: 320 70% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 340 20% 92%;
+    --sidebar-accent-foreground: 25 40% 25%;
+    --sidebar-border: 340 20% 88%;
+    --sidebar-ring: 320 70% 50%;
+  }
 }
 
 @layer base {
-  :root {
-    /* Luxury Chocolate Theme */
-    --background: 330 40% 8%;
-    --foreground: 38 50% 92%;
-
-    --card: 330 35% 12%;
-    --card-foreground: 38 50% 92%;
-
-    --popover: 330 35% 10%;
-    --popover-foreground: 38 50% 92%;
-
-    --primary: 40 50% 56%;
-    --primary-foreground: 330 40% 8%;
-
-    --secondary: 25 35% 48%;
-    --secondary-foreground: 38 50% 92%;
-
-    --muted: 330 20% 18%;
-    --muted-foreground: 35 20% 75%;
-
-    --accent: 40 45% 45%;
-    --accent-foreground: 38 50% 92%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 40 30% 25%;
-    --input: 330 25% 20%;
-    --ring: 40 50% 56%;
-
-    --radius: 0.5rem;
-
-    /* Custom tokens */
-    --gold: 40 50% 56%;
-    --gold-light: 42 55% 65%;
-    --gold-dark: 38 45% 45%;
-    --bronze: 25 35% 48%;
-    --cream: 38 50% 92%;
-    --cream-muted: 35 20% 75%;
-    --chocolate-dark: 330 40% 8%;
-    --chocolate-medium: 330 35% 12%;
-    --chocolate-light: 330 25% 18%;
-
-    /* Gradients */
-    --gradient-gold: linear-gradient(135deg, hsl(40 50% 56%), hsl(42 55% 65%));
-    --gradient-chocolate: linear-gradient(180deg, hsl(330 35% 12%), hsl(330 40% 8%));
-    --gradient-hero: linear-gradient(135deg, hsl(330 40% 10%) 0%, hsl(330 35% 6%) 100%);
-
-    /* Shadows */
-    --shadow-gold: 0 4px 30px hsl(40 50% 56% / 0.2);
-    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.3);
-    --shadow-glow: 0 0 40px hsl(40 50% 56% / 0.3);
-
-    --sidebar-background: 330 35% 10%;
-    --sidebar-foreground: 38 50% 92%;
-    --sidebar-primary: 40 50% 56%;
-    --sidebar-primary-foreground: 330 40% 8%;
-    --sidebar-accent: 330 25% 18%;
-    --sidebar-accent-foreground: 38 50% 92%;
-    --sidebar-border: 40 30% 25%;
-    --sidebar-ring: 40 50% 56%;
-  }
-
   * {
     @apply border-border;
   }
@@ -97,55 +69,30 @@ body {
 
   body {
     @apply bg-background text-foreground font-body antialiased;
-    background-image: var(--gradient-hero);
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-primary/20 rounded-2xl;
-    box-shadow: var(--shadow-card);
+    @apply bg-card backdrop-blur-xl border border-border rounded-2xl shadow-lg;
   }
 
-  .gold-text {
-    @apply text-primary;
-    text-shadow: 0 0 20px hsl(var(--primary) / 0.3);
-  }
-
-  .gold-glow {
-    box-shadow: var(--shadow-glow);
-  }
-
-  .gold-border {
-    @apply border border-primary/30;
-  }
-
-  .gradient-gold-text {
+  .gradient-purple-text {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)));
+    background-image: linear-gradient(135deg, hsl(var(--purple)), hsl(var(--pink)));
   }
 
-  .btn-gold {
+  .btn-pink {
     @apply bg-primary text-primary-foreground font-semibold px-8 py-3 rounded-full;
-    @apply transition-all duration-300 ease-out;
-    @apply hover:scale-105;
-    box-shadow: 0 4px 20px hsl(var(--primary) / 0.4);
+    @apply transition-all duration-300 ease-out hover:scale-105;
+    box-shadow: 0 4px 20px hsl(var(--primary) / 0.3);
   }
 
-  .btn-gold:hover {
-    box-shadow: 0 6px 30px hsl(var(--primary) / 0.6);
-  }
-
-  .btn-outline-gold {
+  .btn-outline-pink {
     @apply border-2 border-primary text-primary font-semibold px-8 py-3 rounded-full;
     @apply transition-all duration-300 ease-out bg-transparent;
     @apply hover:bg-primary hover:text-primary-foreground hover:scale-105;
@@ -161,10 +108,6 @@ body {
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
@@ -172,49 +115,9 @@ body {
   .animate-float-delayed {
     animation: float 6s ease-in-out infinite 2s;
   }
-
-  .animate-shimmer {
-    animation: shimmer 3s ease-in-out infinite;
-  }
 }
 
 @keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-/* ✅ Medium Gold Scrollbar */
-.scrollbar-gold::-webkit-scrollbar {
-  width: 3px; /* ✅ very thin premium */
-}
-
-
-.scrollbar-gold::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-}
-
-.scrollbar-gold::-webkit-scrollbar-thumb {
-  background: rgba(209, 178, 106, 0.65);
-  border-radius: 20px;
-}
-
-.scrollbar-gold::-webkit-scrollbar-thumb:hover {
-  background: rgba(209, 178, 106, 0.9);
-}
-
-
-
-@keyframes shimmer {
-  0%,
-  100% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 1;
-  }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
 }

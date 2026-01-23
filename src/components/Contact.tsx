@@ -10,10 +10,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="section-padding relative">
-      {/* Decorative gradient */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-
+    <section id="contact" className="section-padding relative bg-background">
       <div className="container-custom">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -22,13 +19,13 @@ const Contact = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <span className="text-primary text-sm tracking-[0.3em] uppercase font-medium mb-4 block">
+          <span className="text-primary text-sm tracking-[0.3em] uppercase font-semibold mb-4 block">
             Get In Touch
           </span>
-          <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-cream mb-6">
-            Contact <span className="gradient-gold-text">Us</span>
+          <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
+            Contact <span className="gradient-purple-text">Us</span>
           </h2>
-          <p className="text-cream-muted text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Have questions or want to place a custom order? We'd love to hear from you!
           </p>
         </motion.div>
@@ -42,43 +39,43 @@ const Contact = () => {
             transition={{ duration: 0.8 }}
             className="space-y-6"
           >
-            <div className="glass-card p-6 flex items-center gap-4 group hover:border-primary/40 transition-all">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+            <div className="bg-white rounded-2xl p-6 flex items-center gap-4 shadow-lg border border-border group hover:border-primary/40 transition-all">
+              <div className="w-12 h-12 rounded-full bg-pink-light flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <Phone className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-cream font-medium mb-1">Phone</h3>
+                <h3 className="text-foreground font-medium mb-1">Phone</h3>
                 <a
                   href="tel:+919494437815"
-                  className="text-cream-muted hover:text-primary transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   +91 94944 37815
                 </a>
               </div>
             </div>
 
-            <div className="glass-card p-6 flex items-center gap-4 group hover:border-primary/40 transition-all">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+            <div className="bg-white rounded-2xl p-6 flex items-center gap-4 shadow-lg border border-border group hover:border-primary/40 transition-all">
+              <div className="w-12 h-12 rounded-full bg-pink-light flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <Mail className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-cream font-medium mb-1">Email</h3>
+                <h3 className="text-foreground font-medium mb-1">Email</h3>
                 <a
                   href="mailto:darsischocolatecrafts@gmail.com"
-                  className="text-cream-muted hover:text-primary transition-colors text-sm"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
                 >
                   darsischocolatecrafts@gmail.com
                 </a>
               </div>
             </div>
 
-            <div className="glass-card p-6 flex items-start gap-4 group hover:border-primary/40 transition-all">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors flex-shrink-0">
+            <div className="bg-white rounded-2xl p-6 flex items-start gap-4 shadow-lg border border-border group hover:border-primary/40 transition-all">
+              <div className="w-12 h-12 rounded-full bg-pink-light flex items-center justify-center group-hover:bg-primary/20 transition-colors flex-shrink-0">
                 <MapPin className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-cream font-medium mb-1">Address</h3>
-                <p className="text-cream-muted text-sm">
+                <h3 className="text-foreground font-medium mb-1">Address</h3>
+                <p className="text-muted-foreground text-sm">
                   GANAPAVARAM,<br />
                   West Godavari,<br />
                   Andhra Pradesh, India
@@ -103,7 +100,7 @@ const Contact = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="glass-card overflow-hidden h-[400px] md:h-auto"
+            className="bg-white rounded-2xl overflow-hidden h-[400px] md:h-auto shadow-lg border border-border"
           >
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d122251.78379520866!2d81.45!3d16.55!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a37cd9d6cc12a55%3A0xdcd1c7a8b9f5c896!2sWest%20Godavari%20District%2C%20Andhra%20Pradesh!5e0!3m2!1sen!2sin!4v1705647900000!5m2!1sen!2sin"
