@@ -253,14 +253,16 @@ const Hero = () => {
 
           {/* ✅ Quick Info Line */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="mt-10 text-sm md:text-base text-chocolate-medium"
-          >
-            ✨ Customised chocolates for all occasions • 
-            📍 Ganapavaram, West Godavari,Andhra Pradesh
-          </motion.div>
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 0.8 }}
+  className="mt-10 text-sm md:text-base text-chocolate-medium"
+>
+  ✨ Customised chocolates for all occasions • 
+  📍 Ganapavaram, West Godavari,<br />
+  Andhra Pradesh
+</motion.div>
+
         </div>
       </div>
 
