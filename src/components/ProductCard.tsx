@@ -51,17 +51,23 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
     : product.priceLabel;
 
   const handleAddToCart = () => {
-    addToCart(product, {
-      selectedFlavor,
-      selectedPrice: currentPrice,
-      selectedPriceLabel: selectedVariant ? selectedVariant.label : undefined,
-      quantity,
-    });
-    setQuantity(minQty);
-  };
+  addToCart(product, {
+    selectedFlavor: product.assorted ? "Assorted Flavours" : selectedFlavor,
+    selectedPrice: currentPrice,
+    selectedPriceLabel: selectedVariant ? selectedVariant.label : undefined,
+    quantity,
+  });
+
+  setQuantity(minQty);
+};
 
   const handleWhatsAppOrder = () => {
-    const flavorText = selectedFlavor ? `\nFlavour: ${selectedFlavor}` : "";
+    const flavorText = product.assorted
+  ? "\nFlavours: Assorted"
+  : selectedFlavor
+  ? `\nFlavour: ${selectedFlavor}`
+  : "";
+
     const variantText = selectedVariant ? `\nSelected: ${selectedVariant.label}` : "";
 
     const message = encodeURIComponent(
@@ -156,48 +162,73 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
         )}
 
         {/* Flavor Selector */}
-        {product.flavors && product.flavors.length > 0 && (
-          <div className="relative mb-3 sm:mb-4">
-            <button
-              onClick={() => setIsFlavorOpen(!isFlavorOpen)}
-              className="w-full flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 bg-pink-light border border-primary/30 rounded-xl text-foreground text-xs sm:text-sm hover:border-primary transition-colors"
-            >
-              <span className="truncate">{selectedFlavor || "Select Flavour"}</span>
-              <ChevronDown className={`w-4 h-4 text-primary transition-transform ${isFlavorOpen ? "rotate-180" : ""}`} />
-            </button>
+        {/* ✅ ASSORTED FLAVOURS DISPLAY */}
+{product.assorted && product.flavors && (
+  <div className="mb-3 sm:mb-4 bg-pink-light border border-primary/30 rounded-xl p-3">
+    <p className="text-xs sm:text-sm font-semibold text-foreground mb-2">
+      Assorted Flavours Included
+    </p>
+    <div className="space-y-1">
+      {product.flavors.map((flavor) => (
+        <div key={flavor} className="flex items-center gap-2 text-xs sm:text-sm text-foreground">
+          <Check className="w-4 h-4 text-primary" />
+          <span>{flavor}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
-            <AnimatePresence>
-              {isFlavorOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border border-primary/30 rounded-xl overflow-hidden shadow-xl"
-                >
-                  <div className="max-h-44 overflow-y-auto">
-                    {product.flavors.map((flavor) => (
-                      <button
-                        key={flavor}
-                        onClick={() => {
-                          setSelectedFlavor(flavor);
-                          setIsFlavorOpen(false);
-                        }}
-                        className={`w-full flex items-center justify-between px-3 sm:px-4 py-2.5 text-xs sm:text-sm text-left transition-colors ${
-                          selectedFlavor === flavor
-                            ? "bg-primary text-white"
-                            : "text-foreground hover:bg-pink-light"
-                        }`}
-                      >
-                        <span className="truncate pr-2">{flavor}</span>
-                        {selectedFlavor === flavor && <Check className="w-4 h-4 flex-shrink-0" />}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+{/* ✅ NORMAL FLAVOUR DROPDOWN (ONLY FOR NON-ASSORTED) */}
+{!product.assorted && product.flavors && product.flavors.length > 0 && (
+  <div className="relative mb-3 sm:mb-4">
+    <button
+      onClick={() => setIsFlavorOpen(!isFlavorOpen)}
+      className="w-full flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 bg-pink-light border border-primary/30 rounded-xl text-foreground text-xs sm:text-sm hover:border-primary transition-colors"
+    >
+      <span className="truncate">{selectedFlavor || "Select Flavour"}</span>
+      <ChevronDown
+        className={`w-4 h-4 text-primary transition-transform ${
+          isFlavorOpen ? "rotate-180" : ""
+        }`}
+      />
+    </button>
+
+    <AnimatePresence>
+      {isFlavorOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border border-primary/30 rounded-xl overflow-hidden shadow-xl"
+        >
+          <div className="max-h-44 overflow-y-auto">
+            {product.flavors.map((flavor) => (
+              <button
+                key={flavor}
+                onClick={() => {
+                  setSelectedFlavor(flavor);
+                  setIsFlavorOpen(false);
+                }}
+                className={`w-full flex items-center justify-between px-3 sm:px-4 py-2.5 text-xs sm:text-sm text-left transition-colors ${
+                  selectedFlavor === flavor
+                    ? "bg-primary text-white"
+                    : "text-foreground hover:bg-pink-light"
+                }`}
+              >
+                <span className="truncate pr-2">{flavor}</span>
+                {selectedFlavor === flavor && (
+                  <Check className="w-4 h-4 flex-shrink-0" />
+                )}
+              </button>
+            ))}
           </div>
-        )}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+)}
+
 
         <p className="text-primary text-[11px] sm:text-xs mb-2 sm:mb-4 font-medium">
           {product.minOrder}

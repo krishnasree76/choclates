@@ -31,56 +31,60 @@ export interface Product {
   category: "Classic" | "Designer Series" | "Premium Series" | "Photo Customised";
   flavors?: string[];
   variants?: Variant[];
+  assorted?: boolean;
 }
 
 export const products: Product[] = [
   {
-    id: "square-bites",
-    name: "Square Chocolate Bites (13g)",
-    description:
-      "6 Exotic Flavours (Assorted): Blueberry, Strawberry, Mango, Mint, Rose, Orange",
-    details: "12 Pcs Box",
-    price: 219,
-    priceLabel: "₹219 / Box",
-    image: squareBites,
-    minOrder: "Min order: 2 Boxes",
-    category: "Classic",
-    flavors: ["Blueberry", "Strawberry", "Mango", "Mint", "Rose", "Orange"],
-  },
-  {
-    id: "small-bars",
-    name: "Small Chocolate Bars (20g)",
-    description:
-      "3 Variants: Dark w/ Raisins, Milk w/ Almonds, White w/ Oreo & Crackle",
-    details: "12 Pcs Box",
-    price: 349,
-    priceLabel: "₹349 / Box",
-    image: smallBars,
-    minOrder: "Min order: 1 Box",
-    category: "Classic",
-    flavors: [
-      "Dark with Raisins",
-      "Milk with Roasted Almonds",
-      "White with Oreo & Crackle",
-    ],
-  },
-  {
-    id: "big-bars",
-    name: "Big Chocolate Bars (50g)",
-    description:
-      "3 Variants: Dark w/ Raisins, Milk w/ Almonds, White w/ Oreo & Crackle",
-    details: "6 Pcs Box",
-    price: 449,
-    priceLabel: "₹449 / Box",
-    image: bigBars,
-    minOrder: "Min order: 1 Box",
-    category: "Classic",
-    flavors: [
-      "Dark with Raisins",
-      "Milk with Roasted Almonds",
-      "White with Oreo & Crackle",
-    ],
-  },
+  id: "square-bites",
+  name: "Square Chocolate Bites (13g)",
+  description:
+    "6 Exotic Flavours (Assorted): Blueberry, Strawberry, Mango, Mint, Rose, Orange",
+  details: "12 Pcs Box",
+  price: 219,
+  priceLabel: "₹219 / Box",
+  image: squareBites,
+  minOrder: "Min order: 2 Boxes",
+  category: "Classic",
+  flavors: ["Blueberry", "Strawberry", "Mango", "Mint", "Rose", "Orange"],
+  assorted: true, // ✅ ADDED
+},
+{
+  id: "small-bars",
+  name: "Small Chocolate Bars (20g)",
+  description:
+    "3 Variants (Assorted): Dark with Raisins, Milk with Almonds, White with Oreo & Crackle",
+  details: "12 Pcs Box",
+  price: 349,
+  priceLabel: "₹349 / Box",
+  image: smallBars,
+  minOrder: "Min order: 1 Box",
+  category: "Classic",
+  flavors: [
+    "Dark with Raisins",
+    "Milk with Roasted Almonds",
+    "White with Oreo & Crackle",
+  ],
+  assorted: true, // ✅ ADDED
+},
+{
+  id: "big-bars",
+  name: "Big Chocolate Bars (50g)",
+  description:
+    "3 Variants (Assorted): Dark with Raisins, Milk with Almonds, White with Oreo & Crackle",
+  details: "6 Pcs Box",
+  price: 449,
+  priceLabel: "₹449 / Box",
+  image: bigBars,
+  minOrder: "Min order: 1 Box",
+  category: "Classic",
+  flavors: [
+    "Dark with Raisins",
+    "Milk with Roasted Almonds",
+    "White with Oreo & Crackle",
+  ],
+  assorted: true, // ✅ ADDED
+},
 
   // ✅ UPDATED: Floral Name Bar (55g & 100g merged into variants)
   {
