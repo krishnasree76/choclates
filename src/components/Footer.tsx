@@ -1,24 +1,6 @@
 import { motion } from "framer-motion";
-import { Instagram, Facebook, Linkedin, Heart } from "lucide-react";
+import { Instagram, Heart, Truck } from "lucide-react";
 import logo from "@/assets/logo.png";
-
-const socialLinks = [
-  {
-    icon: Instagram,
-    href: "https://instagram.com/darsis_chocolates",
-    label: "Instagram",
-  },
-  {
-    icon: Facebook,
-    href: "https://facebook.com",
-    label: "Facebook",
-  },
-  {
-    icon: Linkedin,
-    href: "https://linkedin.com",
-    label: "LinkedIn",
-  },
-];
 
 const quickLinks = [
   { name: "Home", href: "#home" },
@@ -54,9 +36,17 @@ const Footer = () => {
             Darsi's Chocolate
           </h3>
 
-          <p className="text-muted-foreground max-w-md mb-8">
+          <p className="text-muted-foreground max-w-md mb-6">
             Handcrafted chocolates made with love in the heart of Andhra Pradesh
           </p>
+
+          {/* 🚚 Pan-India Delivery Badge */}
+          <div className="mb-8">
+            <div className="inline-flex items-center gap-2 bg-pink-light text-primary px-4 py-2 rounded-full text-sm font-medium border border-primary/20">
+              <Truck className="w-4 h-4" />
+              Pan-India Delivery Available
+            </div>
+          </div>
 
           {/* Quick Links */}
           <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
@@ -71,22 +61,28 @@ const Footer = () => {
             ))}
           </div>
 
-          {/* Social Links */}
-          <div className="flex items-center gap-4 mb-8">
-            {socialLinks.map((social) => (
-              <motion.a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-11 h-11 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-pink-light transition-colors"
-                aria-label={social.label}
-              >
-                <social.icon className="w-5 h-5" />
-              </motion.a>
-            ))}
+          {/* Instagram */}
+          <div className="flex flex-col items-center gap-3 mb-8">
+            <motion.a
+              href="https://instagram.com/darsis_chocolate"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-11 h-11 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-pink-light transition-colors"
+              aria-label="Instagram"
+            >
+              <Instagram className="w-5 h-5" />
+            </motion.a>
+
+            <a
+              href="https://instagram.com/darsis_chocolate"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-primary hover:underline"
+            >
+              @darsis_chocolate
+            </a>
           </div>
 
           {/* Copyright */}
@@ -97,7 +93,7 @@ const Footer = () => {
               <Heart className="w-4 h-4 text-primary" fill="currentColor" />
               by{" "}
               <a
-                href="https://staffarc.com"
+                href="https://staffarc.in"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:underline"

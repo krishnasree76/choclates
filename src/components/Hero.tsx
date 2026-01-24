@@ -258,7 +258,8 @@ const Hero = () => {
             transition={{ delay: 0.8 }}
             className="mt-10 text-sm md:text-base text-chocolate-medium"
           >
-            ✨ Customised chocolates for all occasions • 📍 Ganapavaram, West Godavari
+            ✨ Customised chocolates for all occasions • 
+            📍 Ganapavaram, West Godavari,Andhra Pradesh
           </motion.div>
         </div>
       </div>

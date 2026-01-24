@@ -19,8 +19,8 @@ const services = [
   },
   {
     icon: Users,
-    title: "Baby Showers",
-    description: "Adorable themed chocolates for your special celebrations",
+    title: "Say It with a Chocolate ",
+    description: "Sorry, Congrats, All the best, Miss you, Thank you, I Love you",
   },
   {
     icon: PartyPopper,

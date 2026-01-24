@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
+import { Phone, Mail, MapPin, MessageCircle, Instagram } from "lucide-react";
 
 const Contact = () => {
   const openWhatsApp = () => {
@@ -39,6 +39,7 @@ const Contact = () => {
             transition={{ duration: 0.8 }}
             className="space-y-6"
           >
+            {/* Phone */}
             <div className="bg-white rounded-2xl p-6 flex items-center gap-4 shadow-lg border border-border group hover:border-primary/40 transition-all">
               <div className="w-12 h-12 rounded-full bg-pink-light flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <Phone className="w-5 h-5 text-primary" />
@@ -54,6 +55,7 @@ const Contact = () => {
               </div>
             </div>
 
+            {/* Email */}
             <div className="bg-white rounded-2xl p-6 flex items-center gap-4 shadow-lg border border-border group hover:border-primary/40 transition-all">
               <div className="w-12 h-12 rounded-full bg-pink-light flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <Mail className="w-5 h-5 text-primary" />
@@ -69,6 +71,25 @@ const Contact = () => {
               </div>
             </div>
 
+            {/* Instagram */}
+            <div className="bg-white rounded-2xl p-6 flex items-center gap-4 shadow-lg border border-border group hover:border-primary/40 transition-all">
+              <div className="w-12 h-12 rounded-full bg-pink-light flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <Instagram className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-foreground font-medium mb-1">Instagram</h3>
+                <a
+                  href="https://instagram.com/darsis_chocolate"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  @darsis_chocolate
+                </a>
+              </div>
+            </div>
+
+            {/* Address */}
             <div className="bg-white rounded-2xl p-6 flex items-start gap-4 shadow-lg border border-border group hover:border-primary/40 transition-all">
               <div className="w-12 h-12 rounded-full bg-pink-light flex items-center justify-center group-hover:bg-primary/20 transition-colors flex-shrink-0">
                 <MapPin className="w-5 h-5 text-primary" />
@@ -83,6 +104,7 @@ const Contact = () => {
               </div>
             </div>
 
+            {/* WhatsApp Button */}
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
