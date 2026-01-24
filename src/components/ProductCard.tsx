@@ -17,9 +17,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, index }: ProductCardProps) => {
-  // ✅ extract minimum quantity from product.minOrder
   const minQty = useMemo(() => {
-    // supports: "Min order: 2 Boxes", "Minimum order quantity 2 Bars", "Min order: 50 pcs"
     const match = product.minOrder?.match(/(\d+)/);
     const qty = match ? parseInt(match[1], 10) : 1;
     return Number.isNaN(qty) ? 1 : qty;
@@ -27,25 +25,20 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
 
   const [quantity, setQuantity] = useState(minQty);
 
-  // ✅ if product changes, update quantity to its min order
   useEffect(() => {
     setQuantity(minQty);
   }, [minQty, product.id]);
 
-  // ✅ Flavor selector state
   const [selectedFlavor, setSelectedFlavor] = useState(product.flavors?.[0] || "");
   const [isFlavorOpen, setIsFlavorOpen] = useState(false);
 
-  // ✅ Variant selector state
   const [selectedVariant, setSelectedVariant] = useState(product.variants?.[0] || null);
   const [isVariantOpen, setIsVariantOpen] = useState(false);
 
   const { addToCart } = useCart();
 
-  // ✅ Dynamic price based on selected variant
   const currentPrice = selectedVariant?.price ?? product.price;
 
-  // ✅ Dynamic label (Bar/Box fallback)
   const unitLabel =
     product.id.includes("bites") ||
     product.id.includes("bars") ||
@@ -64,8 +57,6 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
       selectedPriceLabel: selectedVariant ? selectedVariant.label : undefined,
       quantity,
     });
-
-    // ✅ reset to min order after adding
     setQuantity(minQty);
   };
 
@@ -90,14 +81,14 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
-      className="bg-white rounded-2xl overflow-hidden shadow-lg border border-border group"
+      className="bg-white rounded-2xl shadow-lg border border-border overflow-hidden flex flex-col h-full"
     >
-      {/* ✅ Image (smaller in phone) */}
-      <div className="relative h-36 sm:h-56 overflow-hidden">
+      {/* Image */}
+      <div className="relative h-44 sm:h-56 overflow-hidden flex-shrink-0">
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent" />
         <span className="absolute top-3 right-3 bg-primary text-white text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full">
@@ -105,9 +96,8 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
         </span>
       </div>
 
-      {/* ✅ Content */}
-      <div className="p-4 sm:p-6">
-        {/* Title */}
+      {/* Content */}
+      <div className="p-4 sm:p-6 flex flex-col flex-grow">
         <h3 className="font-heading text-base sm:text-xl text-foreground mb-1 sm:mb-2 line-clamp-1">
           {product.name} {selectedVariant ? `(${selectedVariant.label})` : ""}
         </h3>
@@ -116,21 +106,17 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
           {product.description}
         </p>
 
-        {/* ✅ Variant Selector */}
-        {product.variants && product.variants.length > 0 && (
+        {/* Variant Selector */}
+        {product.variants && (
           <div className="relative mb-3 sm:mb-4">
             <button
               onClick={() => setIsVariantOpen(!isVariantOpen)}
-              className="w-full flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 bg-pink-light border border-primary/30 rounded-xl text-foreground text-xs sm:text-sm hover:border-primary transition-colors"
+              className="w-full flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 bg-pink-light border border-primary/30 rounded-xl text-xs sm:text-sm"
             >
               <span className="truncate">
                 {selectedVariant?.label || "Select Option"}
               </span>
-              <ChevronDown
-                className={`w-4 h-4 text-primary transition-transform ${
-                  isVariantOpen ? "rotate-180" : ""
-                }`}
-              />
+              <ChevronDown className={`w-4 h-4 text-primary ${isVariantOpen ? "rotate-180" : ""}`} />
             </button>
 
             <AnimatePresence>
@@ -139,150 +125,76 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
                   initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
-                  className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border border-primary/30 rounded-xl overflow-hidden shadow-xl"
+                  className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border border-primary/30 rounded-xl shadow-xl"
                 >
-                  <div className="max-h-44 overflow-y-auto">
-                    {product.variants.map((variant) => (
-                      <button
-                        key={variant.label}
-                        onClick={() => {
-                          setSelectedVariant(variant);
-                          setIsVariantOpen(false);
-                        }}
-                        className={`w-full flex items-center justify-between px-3 sm:px-4 py-2.5 text-xs sm:text-sm text-left transition-colors ${
-                          selectedVariant?.label === variant.label
-                            ? "bg-primary text-white"
-                            : "text-foreground hover:bg-pink-light"
-                        }`}
-                      >
-                        <span className="truncate pr-2">
-                          {variant.label} — ₹{variant.price}
-                        </span>
-                        {selectedVariant?.label === variant.label && (
-                          <Check className="w-4 h-4 flex-shrink-0" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
+                  {product.variants.map((variant) => (
+                    <button
+                      key={variant.label}
+                      onClick={() => {
+                        setSelectedVariant(variant);
+                        setIsVariantOpen(false);
+                      }}
+                      className={`w-full px-4 py-3 text-xs sm:text-sm text-left ${
+                        selectedVariant?.label === variant.label
+                          ? "bg-primary text-white"
+                          : "hover:bg-pink-light"
+                      }`}
+                    >
+                      {variant.label} — ₹{variant.price}
+                    </button>
+                  ))}
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
         )}
 
-        {/* ✅ Flavor Selector */}
-        {product.flavors && product.flavors.length > 0 && (
-          <div className="relative mb-3 sm:mb-4">
-            <button
-              onClick={() => setIsFlavorOpen(!isFlavorOpen)}
-              className="w-full flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 bg-pink-light border border-primary/30 rounded-xl text-foreground text-xs sm:text-sm hover:border-primary transition-colors"
-            >
-              <span className="truncate">{selectedFlavor || "Select Flavour"}</span>
-              <ChevronDown
-                className={`w-4 h-4 text-primary transition-transform ${
-                  isFlavorOpen ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-
-            <AnimatePresence>
-              {isFlavorOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border border-primary/30 rounded-xl overflow-hidden shadow-xl"
-                >
-                  <div className="max-h-44 overflow-y-auto">
-                    {product.flavors.map((flavor) => (
-                      <button
-                        key={flavor}
-                        onClick={() => {
-                          setSelectedFlavor(flavor);
-                          setIsFlavorOpen(false);
-                        }}
-                        className={`w-full flex items-center justify-between px-3 sm:px-4 py-2.5 text-xs sm:text-sm text-left transition-colors ${
-                          selectedFlavor === flavor
-                            ? "bg-primary text-white"
-                            : "text-foreground hover:bg-pink-light"
-                        }`}
-                      >
-                        <span className="truncate pr-2">{flavor}</span>
-                        {selectedFlavor === flavor && (
-                          <Check className="w-4 h-4 flex-shrink-0" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        )}
-
-        {/* Min Order */}
-        <p className="text-primary text-[11px] sm:text-xs mb-2 sm:mb-4 font-medium">
+        <p className="text-primary text-xs mb-2 sm:mb-4 font-medium">
           {product.minOrder}
         </p>
 
-        {/* Price */}
         <div className="text-primary font-bold text-base sm:text-lg mb-3 sm:mb-4">
           {displayPriceLabel}
         </div>
 
         {/* Quantity */}
         <div className="flex items-center justify-between mb-3 sm:mb-4">
-          <span className="text-muted-foreground text-xs sm:text-sm">
-            Quantity
-          </span>
-
+          <span className="text-muted-foreground text-xs sm:text-sm">Quantity</span>
           <div className="flex items-center gap-2 sm:gap-3">
-            <motion.button
-              whileTap={{ scale: 0.9 }}
+            <button
               onClick={() => setQuantity((q) => Math.max(minQty, q - 1))}
-              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full border flex items-center justify-center transition-colors
-                ${
-                  quantity <= minQty
-                    ? "border-primary/20 text-primary/30 cursor-not-allowed"
-                    : "border-primary/40 text-primary hover:bg-pink-light"
-                }`}
               disabled={quantity <= minQty}
+              className="w-8 h-8 rounded-full border border-primary/30"
             >
-              <Minus className="w-4 h-4" />
-            </motion.button>
+              <Minus className="w-4 h-4 mx-auto" />
+            </button>
 
-            <span className="text-foreground font-semibold w-6 sm:w-8 text-center text-sm">
-              {quantity}
-            </span>
+            <span className="w-6 text-center text-sm">{quantity}</span>
 
-            <motion.button
-              whileTap={{ scale: 0.9 }}
+            <button
               onClick={() => setQuantity((q) => q + 1)}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-primary/40 flex items-center justify-center text-primary hover:bg-pink-light transition-colors"
+              className="w-8 h-8 rounded-full border border-primary/30"
             >
-              <Plus className="w-4 h-4" />
-            </motion.button>
+              <Plus className="w-4 h-4 mx-auto" />
+            </button>
           </div>
         </div>
 
-        {/* Buttons */}
-        <div className="flex gap-2 sm:gap-3">
+        {/* Buttons at Bottom */}
+        <div className="mt-auto pt-4 flex gap-2 sm:gap-3">
           <motion.button
-            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleAddToCart}
-            className="flex-1 bg-primary text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-pink-dark transition-colors text-sm sm:text-base"
+            className="flex-1 bg-primary text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 text-sm sm:text-base"
           >
             <ShoppingBag className="w-4 h-4" />
-            <span className="sm:hidden">Add</span>
-            <span className="hidden sm:inline">Add to Cart</span>
+            Add to Cart
           </motion.button>
 
           <motion.button
-            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleWhatsAppOrder}
-            className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl border border-green-500 flex items-center justify-center text-green-600 hover:bg-green-50 transition-colors"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl border border-green-500 flex items-center justify-center text-green-600"
           >
             <MessageCircle className="w-5 h-5" />
           </motion.button>
