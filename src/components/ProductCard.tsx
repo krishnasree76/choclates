@@ -81,7 +81,8 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
-      className="bg-white rounded-2xl overflow-hidden shadow-lg border border-border group flex flex-col h-full"
+      className="bg-white rounded-2xl overflow-hidden shadow-lg border border-border group flex flex-col h-full w-full"
+
     >
       {/* Image */}
       <div className="relative h-40 sm:h-56 overflow-hidden">
