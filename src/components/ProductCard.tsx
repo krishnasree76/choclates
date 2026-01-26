@@ -39,16 +39,35 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
 
   const currentPrice = selectedVariant?.price ?? product.price;
 
-  const unitLabel =
+const unitLabel = useMemo(() => {
+  const detailsText = Array.isArray(product.details)
+    ? product.details.join(" ").toLowerCase()
+    : product.details.toLowerCase();
+
+  const minOrderText = product.minOrder?.toLowerCase() || "";
+
+  const hasBoxVariant =
+    product.variants?.some(v => v.label.toLowerCase().includes("box"));
+
+  if (
     product.id.includes("bites") ||
     product.id.includes("bars") ||
-    product.details.toLowerCase().includes("box")
-      ? "Box"
-      : "Bar";
+    detailsText.includes("box") ||
+    minOrderText.includes("box") ||
+    hasBoxVariant
+  ) {
+    return "Box";
+  }
 
-  const displayPriceLabel = selectedVariant
-    ? `₹${selectedVariant.price} / ${unitLabel}`
-    : product.priceLabel;
+  return "Bar";
+}, [product]);
+
+
+const displayPriceLabel = selectedVariant
+  ? `₹${selectedVariant.price} / ${unitLabel}`
+  : product.priceLabel;
+
+
 
   const handleAddToCart = () => {
   addToCart(product, {
@@ -112,6 +131,22 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
         <p className="text-muted-foreground text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-2">
           {product.description}
         </p>
+        {/* Product Details (Box breakdown etc.) */}
+{Array.isArray(product.details) ? (
+  <ul className="text-xs sm:text-sm text-foreground/80 mb-3 space-y-1">
+    {product.details.map((d, i) => (
+      <li key={i} className="flex items-start gap-2">
+        <span className="mt-[5px] w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
+        <span>{d}</span>
+      </li>
+    ))}
+  </ul>
+) : (
+  <p className="text-xs sm:text-sm text-foreground/80 mb-3">
+    {product.details}
+  </p>
+)}
+
 
         {/* Variant Selector */}
         {product.variants && product.variants.length > 0 && (

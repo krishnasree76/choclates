@@ -23,7 +23,7 @@ export interface Product {
   id: string;
   name: string;
   description: string;
-  details: string;
+  details: string | string[]; // ✅ allow both text and list
   price: number;
   priceLabel: string;
   image: string;
@@ -34,90 +34,100 @@ export interface Product {
   assorted?: boolean;
 }
 
+
 export const products: Product[] = [
   {
-  id: "square-bites",
-  name: "Square Chocolate Bites (13g)",
-  description:
-    "6 Exotic Flavours (Assorted): Blueberry, Strawberry, Mango, Mint, Rose, Orange",
-  details: "12 Pcs Box",
-  price: 219,
-  priceLabel: "₹219 / Box",
-  image: squareBites,
-  minOrder: "Min order: 2 Boxes",
-  category: "Classic",
-  flavors: ["Blueberry", "Strawberry", "Mango", "Mint", "Rose", "Orange"],
-  assorted: true, // ✅ ADDED
-},
-{
-  id: "small-bars",
-  name: "Small Chocolate Bars (20g)",
-  description:
-    "3 Variants (Assorted): Dark with Raisins, Milk with Almonds, White with Oreo & Crackle",
-  details: "12 Pcs Box",
-  price: 349,
-  priceLabel: "₹349 / Box",
-  image: smallBars,
-  minOrder: "Min order: 1 Box",
-  category: "Classic",
-  flavors: [
-    "Dark with Raisins",
-    "Milk with Roasted Almonds",
-    "White with Oreo & Crackle",
-  ],
-  assorted: true, // ✅ ADDED
-},
-{
-  id: "big-bars",
-  name: "Big Chocolate Bars (50g)",
-  description:
-    "3 Variants (Assorted): Dark with Raisins, Milk with Almonds, White with Oreo & Crackle",
-  details: "6 Pcs Box",
-  price: 449,
-  priceLabel: "₹449 / Box",
-  image: bigBars,
-  minOrder: "Min order: 1 Box",
-  category: "Classic",
-  flavors: [
-    "Dark with Raisins",
-    "Milk with Roasted Almonds",
-    "White with Oreo & Crackle",
-  ],
-  assorted: true, // ✅ ADDED
-},
+    id: "square-bites",
+    name: "Square Chocolate Bites (13g)",
+    description:
+      "6 Exotic Flavours (Assorted): Blueberry, Strawberry, Mango, Mint, Rose, Orange",
+    details: "12 Pcs Box",
+    price: 219,
+    priceLabel: "₹219 / Box",
+    image: squareBites,
+    minOrder: "Min order: 2 Boxes",
+    category: "Classic",
+    flavors: ["Blueberry", "Strawberry", "Mango", "Mint", "Rose", "Orange"],
+    assorted: true,
+  },
 
-  // ✅ UPDATED: Floral Name Bar (55g & 100g merged into variants)
   {
-  id: "dryfruits-namebar",
-  name: "Dry fruits and Nuts Chocolate Name Bar",
-  description: "(With Name & Wishes)",
-  details: "Personalised Bar",
-  price: 249,
-  priceLabel: "₹249 / Bar",
-  image: dryfruitsNamebar,
-  minOrder: "Minimum order quantity 2 Bars",
-  category: "Designer Series",
-  variants: [
-    { label: "55g", price: 249 },
-    { label: "100g", price: 349 },
-  ],
-},
-{
-  id: "floral-namebar",
-  name: "Floral Chocolate Name Bar",
-  description: "(With Name & Wishes)",
-  details: "Personalised Bar",
-  price: 199,
-  priceLabel: "₹199 / Bar",
-  image: floralNamebar,
-  minOrder: "Minimum order quantity 2 Bars",
-  category: "Designer Series",
-  variants: [
-    { label: "55g", price: 199 },
-    { label: "100g", price: 299 },
-  ],
-},
+    id: "small-bars",
+    name: "Small Chocolate Bars (20g)",
+    description:
+      "3 Variants (Assorted): Dark with Raisins, Milk with Almonds, White with Oreo & Crackle",
+    details: [
+      "3 Variants",
+      "Each Variant: 4 Bars",
+      "3 × 4 = 12 Pieces per Box",
+    ],
+    price: 349,
+    priceLabel: "₹349 / Box",
+    image: smallBars,
+    minOrder: "Min order: 1 Box",
+    category: "Classic",
+    flavors: [
+      "Dark with Raisins",
+      "Milk with Roasted Almonds",
+      "White with Oreo & Crackle",
+    ],
+    assorted: true,
+  },
 
+  {
+    id: "big-bars",
+    name: "Big Chocolate Bars (50g)",
+    description:
+      "3 Variants (Assorted): Dark with Raisins, Milk with Almonds, White with Oreo & Crackle",
+    details: [
+      "3 Variants",
+      "Each Variant: 2 Bars",
+      "3 × 2 = 6 Pieces per Box",
+    ],
+    price: 449,
+    priceLabel: "₹449 / Box",
+    image: bigBars,
+    minOrder: "Min order: 1 Box",
+    category: "Classic",
+    flavors: [
+      "Dark with Raisins",
+      "Milk with Roasted Almonds",
+      "White with Oreo & Crackle",
+    ],
+    assorted: true,
+  },
+
+  {
+    id: "dryfruits-namebar",
+    name: "Dry fruits and Nuts Chocolate Name Bar",
+    description: "(With Name & Wishes)",
+    details: "Personalised Bar",
+    price: 249,
+    priceLabel: "₹249 / Bar",
+    image: dryfruitsNamebar,
+    minOrder: "Minimum order quantity 2 Bars",
+    category: "Designer Series",
+    variants: [
+      { label: "55g", price: 249 },
+      { label: "100g", price: 349 },
+    ],
+  },
+
+  {
+    id: "floral-namebar",
+    name: "Floral Chocolate Name Bar",
+    description: "(With Name & Wishes)",
+    details: "Personalised Bar",
+    price: 199,
+    priceLabel: "₹199 / Bar",
+    image: floralNamebar,
+    minOrder: "Minimum order quantity 2 Bars",
+    category: "Designer Series",
+    variants: [
+      { label: "55g", price: 199 },
+      { label: "100g", price: 299 },
+    ],
+  },
 
   {
     id: "kunafa-bites",
@@ -130,6 +140,7 @@ export const products: Product[] = [
     minOrder: "Min order: 1 Box",
     category: "Premium Series",
   },
+
   {
     id: "kunafa-bar",
     name: "Dubai Pistachio Kunafa Bar (100g)",
@@ -142,7 +153,6 @@ export const products: Product[] = [
     category: "Premium Series",
   },
 
-  // ✅ NEW PRODUCT: Chocolate Covered Oreo
   {
     id: "oreo-chocolate",
     name: "Chocolate Covered Oreo",
@@ -174,6 +184,7 @@ export const products: Product[] = [
       { label: "500g Box", price: 749 },
     ],
   },
+
   {
     id: "stuffed-dates",
     name: "Chocolate Covered Stuffed Dates",
@@ -189,17 +200,19 @@ export const products: Product[] = [
       { label: "500g Box", price: 690 },
     ],
   },
+
   {
     id: "photo-bigbar",
     name: "Photo Customised Big Bar (50g)",
     description: "Personalised with Photo, name, and message",
     details: "Individual Bar",
     price: 90,
-    priceLabel: "₹90 / Bar",
+    priceLabel: "₹99 / Bar",
     image: photoBigbar,
     minOrder: "Min order: 10 pcs",
     category: "Photo Customised",
   },
+
   {
     id: "photo-smallbar",
     name: "Photo Customised Small Bar (20g)",
@@ -211,6 +224,7 @@ export const products: Product[] = [
     minOrder: "Min order: 25 pcs",
     category: "Photo Customised",
   },
+
   {
     id: "photo-squarebites",
     name: "Photo Customised Square Bites (13g)",
